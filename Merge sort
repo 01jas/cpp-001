@@ -1,0 +1,52 @@
+#include <iostream>
+using namespace std;
+
+int a[100000];
+
+void combine(int l, int r, int mid){
+	int a_l[50000], a_r[50000];
+	int count_l=0, count_r=0;
+	a_l[mid-l+1] = a_r[r-mid] = 2147483647;
+	for(int i=0;i<mid-l+1;i++){
+		a_l[i] = a[i+l];
+	}
+	for(int i=0;i<r-mid;i++){
+		a_r[i] = a[i+mid+1];
+	}
+	
+	for(int i=l;i<=r;i++){
+		if(a_l[count_l] < a_r[count_r]){
+			a[i] = a_l[count_l++];
+		}
+		else{
+			a[i] = a_r[count_r++];
+		}
+	}
+}
+
+void apart(int l, int r){
+	if(l == r){
+		return;
+	}
+	int mid = (l+r)/2;
+	apart(l, mid);
+	apart(mid+1, r);
+	combine(l, r, mid);
+}
+
+int main(){
+	int n;
+	cin >> n;
+	for(int i=0;i<n;i++){
+		cin >> a[i];
+	}
+	apart(0, n-1);
+	for(int i=0;i<n;i++){
+		cout << a[i];
+		if(i != n-1){
+			cout << " ";
+		}
+	}
+	cout << endl;
+	return 0;
+}
